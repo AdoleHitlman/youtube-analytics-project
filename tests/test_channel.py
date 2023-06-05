@@ -35,3 +35,15 @@ def test_channel_print_info():
                                  ]
                        }
     assert moscowpython.print_info() == expected_output
+
+def test_channel_title():
+    channel = Channel('UC-OVMPlMA3-YCIeg4z5z23A')
+    assert channel.title == 'MoscowPython'
+
+def test_channel_video_count():
+    channel = Channel('UC-OVMPlMA3-YCIeg4z5z23A')
+    assert channel.video_count == 219
+
+def test_channel_url():
+    channel = Channel('UC-OVMPlMA3-YCIeg4z5z23A')
+    assert channel.url == 'https://www.youtube.com/channel/UC-OVMPlMA3-YCIeg4z5z23A'

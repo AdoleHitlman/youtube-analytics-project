@@ -110,29 +110,29 @@ class Channel:
                 json.dump(data, f, ensure_ascii=False, indent=2)
 
         # получить экземпляр объекта youtube API
-        @staticmethod
-        def get_service():
-            service = build(Channel.YOUTUBE_API_SERVICE_NAME, Channel.YOUTUBE_API_VERSION,
-                            developerKey=Channel.DEVELOPER_KEY)
-            return service
 
-        # список видео на канале
-        def videos(self):
-            youtube = Channel.get_service()
-            videos = []
-            next_page_token = None
-            while True:
-                request = youtube.search().list(
-                    part="id,snippet",
-                    channelId=self.channel_id,
-                    type='video',
-                    maxResults=50,
-                    order='date',
-                    pageToken=next_page_token
-                )
-                response = request.execute()
-                videos += response['items']
-                next_page_token = response.get('nextPageToken')
-                if not next_page_token:
-                    break
-            return videos
+    @classmethod
+    def get_service(cls):
+        service = build(cls.YOUTUBE_API_SERVICE_NAME, cls.YOUTUBE_API_VERSION, developerKey=cls.DEVELOPER_KEY)
+        return service
+
+    # список видео на канале
+    def videos(self):
+        youtube = Channel.get_service()
+        videos = []
+        next_page_token = None
+        while True:
+            request = youtube.search().list(
+                part="id,snippet",
+                channelId=self.channel_id,
+                type='video',
+                maxResults=50,
+                order='date',
+                pageToken=next_page_token
+            )
+            response = request.execute()
+            videos += response['items']
+            next_page_token = response.get('nextPageToken')
+            if not next_page_token:
+                break
+        return videos

@@ -12,9 +12,86 @@ class Channel:
     def __init__(self, channel_id: str) -> None:
         self._channel_id = channel_id
 
+    def __str__(self) -> str:
+        youtube = build(Channel.YOUTUBE_API_SERVICE_NAME, Channel.YOUTUBE_API_VERSION,
+                        developerKey=Channel.DEVELOPER_KEY)
+        channel = youtube.channels().list(part='snippet,statistics,brandingSettings', id=self._channel_id).execute()
+        return f"{channel['items'][0]['snippet']['title']} (https://www.youtube.com/channel/{self._channel_id})"
+
+    def __add__(self, other):
+        youtube = build(Channel.YOUTUBE_API_SERVICE_NAME, Channel.YOUTUBE_API_VERSION,
+                        developerKey=Channel.DEVELOPER_KEY)
+        channel1 = youtube.channels().list(part='snippet,statistics,brandingSettings', id=self._channel_id).execute()
+        channel2 = other.return_info()
+        return int(channel1['items'][0]['statistics']['subscriberCount']) + int(channel2['items'][0]['statistics']['subscriberCount'])
+
+    def __sub__(self, other):
+        youtube = build(Channel.YOUTUBE_API_SERVICE_NAME, Channel.YOUTUBE_API_VERSION,
+                        developerKey=Channel.DEVELOPER_KEY)
+        channel1 = youtube.channels().list(part='snippet,statistics,brandingSettings', id=self._channel_id).execute()
+        channel2 = other.return_info()
+        return int(channel1['items'][0]['statistics']['subscriberCount']) - int(channel2['items'][0]['statistics']['subscriberCount'])
+
+    def __gt__(self, other):
+        youtube = build(Channel.YOUTUBE_API_SERVICE_NAME, Channel.YOUTUBE_API_VERSION,
+                        developerKey=Channel.DEVELOPER_KEY)
+        channel1 = youtube.channels().list(part='snippet,statistics,brandingSettings', id=self._channel_id).execute()
+        channel2 = other.return_info()
+        return int(channel1['items'][0]['statistics']['subscriberCount']) > int(
+            channel2['items'][0]['statistics']['subscriberCount'])
+
+    def __ge__(self, other):
+        youtube = build(Channel.YOUTUBE_API_SERVICE_NAME, Channel.YOUTUBE_API_VERSION,
+                        developerKey=Channel.DEVELOPER_KEY)
+        channel1 = youtube.channels().list(part='snippet,statistics,brandingSettings', id=self._channel_id).execute()
+        channel2 = other.return_info()
+        return int(channel1['items'][0]['statistics']['subscriberCount']) >= int(
+            channel2['items'][0]['statistics']['subscriberCount'])
+
+    def __lt__(self, other):
+        youtube = build(Channel.YOUTUBE_API_SERVICE_NAME, Channel.YOUTUBE_API_VERSION,
+                        developerKey=Channel.DEVELOPER_KEY)
+        channel1 = youtube.channels().list(part='snippet,statistics,brandingSettings', id=self._channel_id).execute()
+        channel2 = other.return_info()
+        return int(channel1['items'][0]['statistics']['subscriberCount']) < int(
+            channel2['items'][0]['statistics']['subscriberCount'])
+
+    def __le__(self, other):
+        youtube = build(Channel.YOUTUBE_API_SERVICE_NAME, Channel.YOUTUBE_API_VERSION,
+                        developerKey=Channel.DEVELOPER_KEY)
+        channel1 = youtube.channels().list(part='snippet,statistics,brandingSettings', id=self._channel_id).execute()
+        channel2 = other.return_info()
+        return int(channel1['items'][0]['statistics']['subscriberCount']) <= int(channel2['items'][0]['statistics']['subscriberCount'])
+
+    def __eq__(self, other):
+        youtube = build(Channel.YOUTUBE_API_SERVICE_NAME, Channel.YOUTUBE_API_VERSION,
+                        developerKey=Channel.DEVELOPER_KEY)
+        channel1 = youtube.channels().list(part='snippet,statistics,brandingSettings', id=self._channel_id).execute()
+        channel2 = other.return_info()
+        return int(channel1['items'][0]['statistics']['subscriberCount']) == int(channel2['items'][0]['statistics']['subscriberCount'])
+
+    def print_info(self) -> dict:
+        youtube = build(Channel.YOUTUBE_API_SERVICE_NAME, Channel.YOUTUBE_API_VERSION,
+                        developerKey=Channel.DEVELOPER_KEY)
+        response = youtube.channels().list(
+            part="snippet,statistics",
+            id=self.channel_id
+        ).execute()
+        print(response)
+        return response
+
+    def return_info(self) -> dict:
+        youtube = build(Channel.YOUTUBE_API_SERVICE_NAME, Channel.YOUTUBE_API_VERSION,
+                        developerKey=Channel.DEVELOPER_KEY)
+        response = youtube.channels().list(
+            part="snippet,statistics",
+            id=self.channel_id
+        ).execute()
+        return response
+
     # свойство channel_id
     @property
-    def channel_id(self):
+    def channel_id(self) -> str:
         return self._channel_id
 
     @channel_id.setter
@@ -89,14 +166,12 @@ class Channel:
 
     # получить экземпляр объекта youtube API
 
-
     @classmethod
     def get_service(cls):
         service = build(cls.YOUTUBE_API_SERVICE_NAME, cls.YOUTUBE_API_VERSION, developerKey=cls.DEVELOPER_KEY)
         return service
 
-
-# список видео на канале
+    # список видео на канале
     def videos(self):
         youtube = Channel.get_service()
         videos = []

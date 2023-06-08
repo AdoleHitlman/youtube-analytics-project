@@ -1,6 +1,39 @@
 from src.channel import Channel
 
 moscowpython = Channel('UC-OVMPlMA3-YCIeg4z5z23A')
+highload = Channel('UCwHL6WHUarjGfUM_586me8w')
+
+
+def test___str__():
+    assert moscowpython.__str__() == 'MoscowPython (https://www.youtube.com/channel/UC-OVMPlMA3-YCIeg4z5z23A)'
+
+
+def test___add__():
+    assert moscowpython + highload == 100800
+
+
+def test___sub__():
+    assert highload - moscowpython == 48600
+
+
+def test___gt__():
+    assert (moscowpython > highload) == False
+
+
+def test___ge__():
+    assert (moscowpython >= highload) == False
+
+
+def test___lt__():
+    assert (moscowpython < highload) == True
+
+
+def test___le__():
+    assert (moscowpython <= highload) == True
+
+
+def test___eq__():
+    assert (moscowpython == highload) == False
 
 
 def test_channel_print_info():
@@ -36,13 +69,16 @@ def test_channel_print_info():
                        }
     assert moscowpython.print_info() == expected_output
 
+
 def test_channel_title():
     channel = Channel('UC-OVMPlMA3-YCIeg4z5z23A')
     assert channel.title == 'MoscowPython'
 
+
 def test_channel_video_count():
     channel = Channel('UC-OVMPlMA3-YCIeg4z5z23A')
     assert channel.video_count == 219
+
 
 def test_channel_url():
     channel = Channel('UC-OVMPlMA3-YCIeg4z5z23A')

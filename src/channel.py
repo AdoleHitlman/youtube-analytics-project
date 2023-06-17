@@ -13,6 +13,8 @@ class Channel:
     def __init__(self, channel_id: str) -> None:
         self._channel_id = channel_id
         self.channel = Channel.youtube.channels().list(part='snippet,statistics,brandingSettings', id=channel_id).execute()
+        self.playlists = Channel.youtube.playlists().list(channelId=channel_id,part='contentDetails,snippet',maxResults=50,).execute()
+
     def __str__(self) -> str:
         return f"{self.channel['items'][0]['snippet']['title']} (https://www.youtube.com/channel/{self._channel_id})"
 
